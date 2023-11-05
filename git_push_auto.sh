@@ -26,15 +26,16 @@ fi
 echo "Staging all changes..."
 git add .
 
-# Automatically generate commit messages with file names
+# Automatically generate commit messages with action items and file names
 for file in $(git diff --cached --name-only); do
   filename=$(basename "$file")
-  git commit -m "Update $filename" -- "$file"
+  action_item="updated"
+  git commit -m "$action_item $filename" -- "$file"
+
+  # Push each file after 15 seconds
+  echo "Pushing $file in 15 seconds..."
+  sleep 15
+  git push
 done
 
-# 3. Add a timer that pushes the files after 10 seconds
-echo "Pushing changes to the remote repository in 10 seconds..."
-sleep 10
-git push
-
-echo "Changes have been pushed successfully."
+echo "All changes have been pushed successfully."
